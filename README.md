@@ -21,38 +21,38 @@ The API accepts and returns only JSON encoded data.
 Here's how you add some tags to some text:
 
 ```
-POST /public/This%20too%20shall%20pass. HTTP/1.1
+POST / HTTP/1.1
 Content-Type: application/json
 
-["quotes","inspiring"]
+{"tokens":["This too shall pass."],"tags":["quotes","inspiring"]}
 ```
 
 To use it as a bookmarking tool:
 
 ```
-POST /public/http://duckduckgo.com/ HTTP/1.1
+POST / HTTP/1.1
 Content-Type: application/json
 
-["url","search","awesome"]
+{"tokens":["http://duckduckgo.com/"],tags":["url","search","awesome"]}
 ```
 
 ```
-POST /public/http://www.bing.com/ HTTP/1.1
+POST / HTTP/1.1
 Content-Type: application/json
 
-["url","search","microsoft"]
+{"tokens":["http://www.bing.com/"],"tags":["url","search","microsoft"]}
 ```
 
 ```
-POST /public/http://www.reddit.com/ HTTP/1.1
+POST / HTTP/1.1
 Content-Type: application/json
 
-["url","timewaster","funny"]
+{"tokens":["http://www.reddit.com/"],"tags":["url","timewaster","funny"]}
 ```
 
 Then, to recall stuff tagged with `search`:
 ```
-GET /public/search HTTP/1.1
+GET /?tags=search HTTP/1.1
 ```
 ->
 ```
@@ -61,36 +61,38 @@ GET /public/search HTTP/1.1
 
 ... or both `search` and `awesome`:
 ```
-GET /public/search,awesome HTTP/1.1
+GET /?tags=search&tags=awesome HTTP/1.1
 ```
 ->
 ```
 {"status":"success","data":["http://duckduckgo.com/"]}
 ```
 
-You can change the default tag separator (`','`) with the `separator` query
-string argument:
-
+Or to see the tags associated with a token:
 ```
-GET /public/search|awesome?separator=| HTTP/1.1
+GET /?tags=http://duckduckgo.com/ HTTP/1.1
 ```
 ->
 ```
-{"status":"success","data":["http://duckduckgo.com/"]}
+{"status":"success","data":["url","search","awesome"]}
 ```
 
-The `public` part of the URL is the namespace used to partition the data.
-You can use any other namespace you want:
+Note that the string MAY be encoded (e.g. `/?tags=http%3A%2F%2Fduckduckgo.com%2F`),
+which should return the same result.
+
+
+By default, the `public` namespace is used if none is specified. But you can
+use any other namespace you want to partition the data. For example:
 ```
-POST /john/http://myprivateblog.com/ HTTP/1.1
+POST /john HTTP/1.1
 Content-Type: application/json
 
-["url"]
+{"tokens":"http://myprivateblog.com/","tags":["url","blog"]}
 ```
 
 Now to get things tagged with `url` under the `john` namespace:
 ```
-GET /john/url HTTP/1.1
+GET /john?tags=url HTTP/1.1
 ```
 ->
 ```

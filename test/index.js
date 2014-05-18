@@ -10,9 +10,9 @@ var expectRequire = require('a').expectRequire,
 
 
 var describeStore = {
-  single: ['test'],
-  double: ['test with multiple tokens'],
-  'http://example.com/': ['test with multiple tokens and custom sep']
+  singlens: ['test'],
+  doublebleh: ['test with multiple tokens'],
+  'http://example.com/': ['test with URL']
 };
 
 var associateArgs = null;
@@ -21,7 +21,7 @@ var associateArgs = null;
 expectRequire('tiq-db').return(function() {
   return {
     describe: function(tokens, ns) {
-      return Promise.resolve(describeStore[tokens[0]]);
+      return Promise.resolve(describeStore[tokens.join('')+ns]);
     },
     associate: function() {
       associateArgs = _.values(arguments);
@@ -32,19 +32,19 @@ expectRequire('tiq-db').return(function() {
 
 var server = require('..');
 
-describe('associate', function() {
+describe('#associate()', function() {
   it('should associate tags with tokens using namespaces', function(done) {
     var options = {
       method: 'POST',
-      url: '/public/url',
-      payload: '["test","namespace"]'
+      url: '/private',
+      payload: '{"tokens":["url"],"tags":["test","namespace"]}'
     };
 
     server.inject(options, function(response) {
       var result = response.result;
       response.statusCode.should.equal(200);
       result.status.should.equal('success');
-      associateArgs.should.deep.equal([['url'], ['test', 'namespace'], 'public'])
+      associateArgs.should.deep.equal([['url'], ['test', 'namespace'], 'private'])
       done();
     });
   });
@@ -52,15 +52,15 @@ describe('associate', function() {
   it('should support URLs in token', function(done) {
     var options = {
       method: 'POST',
-      url: '/public/http://mycoolsite.com/',
-      payload: '["cool","test"]'
+      url: '/',
+      payload: '{"tokens":["http://mycoolsite.com/"],"tags":["cool","test"]}'
     };
 
     server.inject(options, function(response) {
       var result = response.result;
       response.statusCode.should.equal(200);
       result.status.should.equal('success');
-      associateArgs.should.deep.equal([['http://mycoolsite.com/'], ['cool', 'test'], 'public'])
+      associateArgs.should.deep.equal([['http://mycoolsite.com/'], ['cool', 'test'], ''])
       done();
     });
   });
@@ -68,7 +68,7 @@ describe('associate', function() {
   it('should return an error on malformed JSON', function(done) {
     var options = {
       method: 'POST',
-      url: '/public/url',
+      url: '/public',
       payload: '["test"'
     };
 
@@ -81,11 +81,11 @@ describe('associate', function() {
   });
 });
 
-describe('describe', function() {
+describe('#describe()', function() {
   it('should return the tags associated with the token using namespaces', function(done) {
     var options = {
       method: 'GET',
-      url: '/public/single'
+      url: '/ns?tags=single'
     };
 
     server.inject(options, function(response) {
@@ -100,7 +100,7 @@ describe('describe', function() {
   it('should return the tags associated with multiple tokens', function(done) {
     var options = {
       method: 'GET',
-      url: '/public/double,bleh'
+      url: '/?tags=double&tags=bleh'
     };
 
     server.inject(options, function(response) {
@@ -112,17 +112,32 @@ describe('describe', function() {
     });
   });
 
-  it('should return the tags associated with multiple tokens using a custom separator', function(done) {
+  it('should support URLs in token', function(done) {
     var options = {
       method: 'GET',
-      url: '/public/http://example.com/|http://asdf.com?separator=|'
+      url: '/?tags=http://example.com/'
     };
 
     server.inject(options, function(response) {
       var result = response.result;
       response.statusCode.should.equal(200);
       result.status.should.equal('success');
-      result.data.should.deep.equal(['test with multiple tokens and custom sep']);
+      result.data.should.deep.equal(['test with URL'])
+      done();
+    });
+  });
+
+  it('should support encoded URLs in token', function(done) {
+    var options = {
+      method: 'GET',
+      url: '/?tags=http%3A%2F%2Fexample.com%2F'
+    };
+
+    server.inject(options, function(response) {
+      var result = response.result;
+      response.statusCode.should.equal(200);
+      result.status.should.equal('success');
+      result.data.should.deep.equal(['test with URL'])
       done();
     });
   });

@@ -38,8 +38,8 @@ function wrapResponse(result, data, extra) {
  * Associate a collection of tokens with a collection of tags.
  */
 function associate(request, reply) {
-  var tokens = request.params.text.split(request.query.separator || ','),
-      tags = request.payload,
+  var tokens = request.payload.tokens,
+      tags = request.payload.tags,
       ns = request.params.namespace;
 
   tiq.associate(tokens, tags, ns).then(function(res) {
@@ -51,8 +51,13 @@ function associate(request, reply) {
  * Get the tags associated with the given tokens.
  */
 function describe(request, reply) {
-  var tokens = request.params.text.split(request.query.separator || ','),
+  var tokens = request.query.tags,
       ns = request.params.namespace;
+
+  // In case only a single one was passed
+  if (typeof tokens === 'string') {
+    tokens = [tokens];
+  }
 
   tiq.describe(tokens, ns).then(function(tags) {
     reply(wrapResponse(Result.SUCCESS, tags));

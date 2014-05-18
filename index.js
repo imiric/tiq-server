@@ -45,12 +45,12 @@ var server = Hapi.createServer('0.0.0.0', config.port);
 server.route([
   {
     method: 'GET',
-    path: '/{namespace}/{text*}',
+    path: '/{namespace?}',
     handler: handlers.describe
   },
   {
     method: 'POST',
-    path: '/{namespace}/{text*}',
+    path: '/{namespace?}',
     handler: handlers.associate
   },
 ]);
