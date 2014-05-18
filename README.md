@@ -10,7 +10,39 @@ PostgreSQL using [tiq-db](https://github.com/imiric/tiq-db).
 Setup
 -----
 
-TBD
+### Docker
+
+Clone this repo and run:
+
+```
+$ make build
+```
+
+This will download and setup three [Docker](https://www.docker.io/) containers
+with Ubuntu 14.04: one for PostgeSQL, one for nginx and one for tiq-server.
+
+To start the servers run:
+```
+$ make
+```
+... which will make tiq-server (proxied behind nginx) available on
+http://localhost:8000/.
+
+If you wish to change the port, run:
+
+```
+$ make PORT=<number>
+```
+
+You can stop all containers with `make stop`.
+
+
+### Manual
+
+This is more complicated, but essentially `npm install -g tiq-server`, install
+PostgreSQL (and optionally nginx), and configure and start everything manually.
+
+Save yourself the trouble, and just use Docker. :)
 
 
 Usage
