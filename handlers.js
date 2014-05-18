@@ -3,7 +3,6 @@
  * Module dependencies.
  */
 var Tiq = require('tiq-db'),
-    Hapi = require('hapi'),
     _ = require('lodash'),
     tiq;
 
