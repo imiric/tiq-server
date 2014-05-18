@@ -27,7 +27,7 @@ Content-Type: application/json
 {"tokens":["This too shall pass."],"tags":["quotes","inspiring"]}
 ```
 
-To use it as a bookmarking tool:
+To tag some URLs:
 
 ```
 POST / HTTP/1.1
@@ -68,7 +68,7 @@ GET /?tags=search&tags=awesome HTTP/1.1
 {"status":"success","data":["http://duckduckgo.com/"]}
 ```
 
-Or to see the tags associated with a token:
+Or to get the tags associated with a token:
 ```
 GET /?tags=http://duckduckgo.com/ HTTP/1.1
 ```
