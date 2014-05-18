@@ -155,7 +155,27 @@ Configuration
 The configuration file by default is expected in `$XDG_CONFIG_HOME/tiq-server/config.json`
 (where `$XDG_CONFIG_HOME` is `$HOME/.config`).
 
-TBD
+Here are the options you can set in the configuration file:
+
+- `port`: The port the server will listen on. [default: `8000`]
+- `database.client`: The RDBMS client to use. One of `"sqlite3"`, `"pg"` or `"mysql"`.
+  [default: `"pg"`]
+- `database.connection.host`: Host name or IP address to connect to. [default: `"localhost"`]
+- `database.connection.port`: Port to connect to. [default: `5432`]
+- `database.connection.user`: Username used to connect to the host. [default: `null`]
+- `database.connection.password`: Password used to connect to the host. [default: `null`]
+- `database.connection.database`: Database name to use. [default: `"tiq"`]
+
+Essentially, everything under `database` is what [tiq-db](https://github.com/imiric/tiq-db)
+expects.
+
+You can also change some of these at runtime using environment variables that
+follow [Docker linking naming conventions](http://docs.docker.io/use/working_with_links_names/):
+
+- `host`: `$DB_PORT_<NUM>_TCP_ADDR`
+- `port`: `$DB_PORT_<NUM>_TCP_PORT`
+- `user`: `$DB_ENV_USER`
+- `password`: `$DB_ENV_PASSWORD`
 
 License
 -------
