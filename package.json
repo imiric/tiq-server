@@ -1,0 +1,43 @@
+{
+  "name": "tiq-server",
+  "version": "0.0.0",
+  "description": "HTTP API server for tiq",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imiric/tiq-server"
+  },
+  "keywords": [
+    "tiq",
+    "tag",
+    "bookmark",
+    "http",
+    "api",
+    "server"
+  ],
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --ui bdd"
+  },
+  "author": "Ivan Mirić <imiric@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imiric/tiq-server/issues"
+  },
+  "homepage": "https://github.com/imiric/tiq-server",
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "hapi": "~4.1.3",
+    "tiq-db": "0.0.2",
+    "pg": "~3.1.0",
+    "docker-links": "~1.0.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "chai": "~1.9.1",
+    "a": "~0.4.3",
+    "istanbul": "~0.2.10",
+    "bluebird": "~1.2.4",
+    "lodash": "~2.4.1"
+  }
+}
