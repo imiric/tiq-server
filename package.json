@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/imiric/tiq-server"
   },
+  "bin": {
+    "tiq-server": "./index.js"
+  },
   "keywords": [
     "tiq",
     "tag",
