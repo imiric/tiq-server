@@ -25,8 +25,8 @@ var defaultConfig = {
     connection: {
       host: (links.db && links.db.hostname) ? links.db.hostname : 'localhost',
       port: (links.db && links.db.port) ? links.db.port : 5432,
-      user: (links.db && links.db.user) ? links.db.user : null,
-      password: (links.db && links.db.password) ? links.db.password : null,
+      user: process.env.DB_ENV_USER || null,
+      password: process.env.DB_ENV_PASSWORD || null
     }
   }
 };
