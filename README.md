@@ -81,6 +81,23 @@ Note that the string MAY be encoded (e.g. `/?tags=http%3A%2F%2Fduckduckgo.com%2F
 which should return the same result.
 
 
+You can also tag multiple things at once:
+```
+POST / HTTP/1.1
+Content-Type: application/json
+
+{"tokens":["http://www.engadget.com/","http://www.theverge.com/"],"tags":["url","tech"]}
+```
+
+Doing the reverse is equivalent to the above:
+```
+POST / HTTP/1.1
+Content-Type: application/json
+
+{"tags":["http://www.engadget.com/","http://www.theverge.com/"],"tokens":["url","tech"]}
+```
+
+
 By default, the `public` namespace is used if none is specified. But you can
 use any other namespace you want to partition the data. For example:
 ```
